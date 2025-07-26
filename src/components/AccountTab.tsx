@@ -1,8 +1,11 @@
 import React from 'react';
 import { Card } from './Card';
+import { useAuth } from '../contexts/AuthContext';
 import { User, Mail, Key, Bell, Shield, CreditCard } from 'lucide-react';
 
 export const AccountTab: React.FC = () => {
+  const { user } = useAuth();
+
   return (
     <div className="space-y-6">
       <div>
@@ -27,7 +30,7 @@ export const AccountTab: React.FC = () => {
                 <User className="w-8 h-8 text-blue-600" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">John Doe</h3>
+                <h3 className="font-semibold text-gray-900">{user?.email?.split('@')[0] || 'User'}</h3>
                 <p className="text-gray-600">Administrator</p>
               </div>
             </div>
@@ -36,12 +39,12 @@ export const AccountTab: React.FC = () => {
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-gray-400" />
                 <span className="text-sm text-gray-600">Email:</span>
-                <span className="text-sm font-medium">john.doe@example.com</span>
+                <span className="text-sm font-medium">{user?.email || 'Not available'}</span>
               </div>
               <div className="flex items-center gap-3">
                 <User className="w-4 h-4 text-gray-400" />
-                <span className="text-sm text-gray-600">Role:</span>
-                <span className="text-sm font-medium">Administrator</span>
+                <span className="text-sm text-gray-600">User ID:</span>
+                <span className="text-sm font-medium">{user?.uid || 'Not available'}</span>
               </div>
             </div>
           </div>
