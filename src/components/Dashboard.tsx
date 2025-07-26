@@ -3,12 +3,18 @@ import { Tabs, Tab } from './Tabs';
 import { InstancesTab } from './InstancesTab';
 import { AccountTab } from './AccountTab';
 import { NetworkingTab } from './NetworkingTab';
-import { Server, User, Network } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import { Server, User, Network, LogOut } from 'lucide-react';
 
 type TabType = 'instances' | 'account' | 'networking';
 
 export const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('instances');
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -37,10 +43,18 @@ export const Dashboard: React.FC = () => {
             </div>
             
             <div className="flex items-center gap-4">
-              <button className="text-gray-600 hover:text-gray-900">
+              <span className="text-sm text-gray-600 hidden sm:block">
+                {user?.email}
+              </span>
+              <button 
+                onClick={handleLogout}
+                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors"
+                title="Sign Out"
+              >
                 <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
                   <User className="w-5 h-5" />
                 </div>
+                <LogOut className="w-4 h-4 hidden sm:block" />
               </button>
             </div>
           </div>
