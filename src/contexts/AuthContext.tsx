@@ -45,28 +45,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const response = await fetch('https://sign-in.bradensbay.com/sign-in', {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
 
-      // With no-cors mode, we can't read the response body
-      // So we'll assume success if the request doesn't throw
-      if (response.type === 'opaque') {
-        // Create a user session assuming successful login
-        const userInfo = {
-          uid: 'user-' + Date.now(), // Generate a temporary UID
-          email: email,
-        };
-
-        setUser(userInfo);
-        localStorage.setItem('user', JSON.stringify(userInfo));
-        return;
-      }
-
-      // If we somehow get a readable response, handle it normally
       const data = await response.json();
 
       if (!response.ok) {
@@ -74,13 +58,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
 
       // Get user details using the UID
-      const userResponse = await fetch(`https://sign-in.bradensbay.com/user/${data.uid}`, {
-        mode: 'no-cors'
-      });
-      
-      let userData: any = {};
-      if (userResponse.type !== 'opaque') {
-        userData = await userResponse.json();
+      const userResponse = await fetch(`https://sign-in.bradensbay.com/user/${data.uid}`);
+      const userData = await userResponse.json();
+
+      if (!userResponse.ok) {
+        throw new Error('Failed to fetch user data');
       }
 
       const userInfo = {
@@ -100,21 +82,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const response = await fetch('https://new-user.bradensbay.com/signup', {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
 
-      // With no-cors mode, we can't read the response body
-      // So we'll assume success if the request doesn't throw
-      if (response.type === 'opaque') {
-        console.log('Signup request sent successfully (no-cors mode)');
-        return;
-      }
-
-      // If we somehow get a readable response, handle it normally
       const data = await response.json();
 
       if (!response.ok) {

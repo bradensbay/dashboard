@@ -40,11 +40,6 @@ export const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-md text-sm">
-            <strong>Note:</strong> Requests are sent to the authentication servers without CORS restrictions. 
-            Login will create a session using your email.
-          </div>
-
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
               {error}
